@@ -25,7 +25,7 @@ BOOK_AFFILIATE_URL = "https://books.com.tw"
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
-# 軌道 A：每日自動蒐集的新文章（由 API 動態抓取完整長文，與經典原典完全不重複）
+# 軌道 A：每日自動蒐集的新文章（由 API 動態抓取 ＋ 保底補滿 10 篇，永遠滿載）
 DAILY_FRESH_ARTICLES = []
 
 # 軌道 B：傳世經典長文原典館（10 篇千古名篇完整原文 ＋ 深度白話解析）
@@ -115,21 +115,22 @@ FALLBACK_DAILY_ARTICLES = [
 ]
 
 def fetch_daily_articles():
+    today = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
+    today_tag = today.strftime("%Y-%m-%d")
+    if len([x for x in DAILY_FRESH_ARTICLES if x.get("date_tag") == today_tag]) >= 10:
+        return
+
     try:
-        today = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
-        today_tag = today.strftime("%Y-%m-%d")
-        if len([x for x in DAILY_FRESH_ARTICLES if x.get("date_tag") == today_tag]) >= 10:
-            return
         u = "https://wikipedia.org"
-        headers = {"User-Agent": "ClassicReadingSalonBot/4.5"}
-        pages = requests.get(u, headers=headers, timeout=8).json().get("query", {}).get("pages", {})
+        headers = {"User-Agent": "ClassicReadingSalonBot/5.0"}
+        pages = requests.get(u, headers=headers, timeout=6).json().get("query", {}).get("pages", {})
         added = len([x for x in DAILY_FRESH_ARTICLES if x.get("date_tag") == today_tag])
         for pid, pinfo in pages.items():
             if added >= 10:
                 break
             raw_title = pinfo.get("title", "").strip()
             full_txt = pinfo.get("extract", "").strip()
-            if raw_title and len(full_txt) >= 320 and ":" not in raw_title and not any(raw_title in x.get("title", "") for x in DAILY_FRESH_ARTICLES):
+            if raw_title and len(full_txt) >= 300 and ":" not in raw_title and not any(raw_title in x.get("title", "") for x in DAILY_FRESH_ARTICLES):
                 added += 1
                 clean_full = full_txt[:3600] + ("\n\n（……以上為完整深度知識長文精編）" if len(full_txt) > 3600 else "")
                 first_sent = next(iter([s.strip() for s in clean_full.split("。") if len(s.strip()) > 12]), clean_full[:55])
@@ -144,23 +145,27 @@ def fetch_daily_articles():
                     "content": clean_full,
                     "url": f"https://wikipedia.org{urllib.parse.quote(raw_title)}"
                 })
-        for fb in FALLBACK_DAILY_ARTICLES:
-            if len([x for x in DAILY_FRESH_ARTICLES if x.get("date_tag") == today_tag]) >= 10:
-                break
-            if not any(fb["title"] in x.get("title", "") for x in DAILY_FRESH_ARTICLES):
-                DAILY_FRESH_ARTICLES.append({
-                    "id": f"FB_{len(DAILY_FRESH_ARTICLES)+1}",
-                    "date_tag": today_tag,
-                    "track": "每日文章",
-                    "cat": fb["cat"],
-                    "title": fb["title"],
-                    "author": f"{today_tag} {fb['author']}",
-                    "quote": fb["quote"],
-                    "content": fb["content"],
-                    "url": BOOK_AFFILIATE_URL
-                })
     except Exception:
         pass
+
+    # 移出 try...except 之外，確保無論維基 API 是否連線成功，永遠補滿足足 10 篇今日每日長文！
+    for fb in FALLBACK_DAILY_ARTICLES:
+        if len([x for x in DAILY_FRESH_ARTICLES if x.get("date_tag") == today_tag]) >= 10:
+            break
+        if not any(fb["title"] in x.get("title", "") for x in DAILY_FRESH_ARTICLES):
+            DAILY_FRESH_ARTICLES.append({
+                "id": f"FB_{today.strftime('%m%d')}_{len(DAILY_FRESH_ARTICLES)+1}",
+                "date_tag": today_tag,
+                "track": "每日文章",
+                "cat": fb["cat"],
+                "title": fb["title"],
+                "author": f"{today_tag} {fb['author']}",
+                "quote": fb["quote"],
+                "content": fb["content"],
+                "url": BOOK_AFFILIATE_URL
+            })
+
+fetch_daily_articles()
 
 def call_sheet(payload: dict):
     try:
@@ -177,7 +182,7 @@ def get_user_name(uid: str):
 
 @app.api_route("/", methods=["GET", "HEAD"])
 def root():
-    return {"status": "Online", "service": "Taiwan Classic & Daily Full-Text Audio Reader Pro 4.5"}
+    return {"status": "Online", "service": "Taiwan Classic & Daily Full-Text Audio Reader Pro 5.0"}
 
 @app.post("/api/article_add")
 async def web_article_add(
