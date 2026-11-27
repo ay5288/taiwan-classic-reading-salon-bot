@@ -137,7 +137,8 @@ FALLBACK_DAILY_ARTICLES = [
 ]
 
 SEEN_DAILY_TITLES = set()
-WIKI_KNOWLEDGE_CATS = ["Category:心理學", "Category:經濟學", "Category:哲學", "Category:神經科學", "Category:認知科學", "Category:社會學", "Category:世界歷史", "Category:天文學"]
+WIKI_TOPICS = ["心理學", "經濟學", "哲學", "神經科學", "認知偏誤", "天文學", "世界歷史", "量子力學", "行為經濟學", "演化生物學", "社會學", "建築史"]
+WIKI_HEADERS = {"User-Agent": "TaiwanClassicReadingSalon/8.0 (https://onrender.com; reader@reading-salon.tw)"}
 
 def fetch_daily_articles(force: bool = False):
     today = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
@@ -149,20 +150,17 @@ def fetch_daily_articles(force: bool = False):
     elif len([x for x in DAILY_FRESH_ARTICLES if x.get("date_tag") == today_tag]) >= 10:
         return
 
-    headers = {"User-Agent": f"ClassicReadingSalonBot/{random.randint(1000,9999)}"}
-    chosen_cats = random.sample(WIKI_KNOWLEDGE_CATS, min(3, len(WIKI_KNOWLEDGE_CATS)))
+    topic = random.choice(WIKI_TOPICS)
     candidate_titles = []
-
-    for cat_name in chosen_cats:
-        try:
-            cu = f"https://wikipedia.org{urllib.parse.quote(cat_name)}&cmtype=page&cmlimit=20&format=json"
-            cms = requests.get(cu, headers=headers, timeout=5).json().get("query", {}).get("categorymembers", [])
-            for m in cms:
-                t = m.get("title", "").strip()
-                if t and ":" not in t and t not in SEEN_DAILY_TITLES and t not in candidate_titles:
-                    candidate_titles.append(t)
-        except Exception:
-            pass
+    try:
+        su = f"https://wikipedia.org{urllib.parse.quote(topic)}&srlimit=25&format=json"
+        sres = requests.get(su, headers=WIKI_HEADERS, timeout=7).json().get("query", {}).get("search", [])
+        for item in sres:
+            t = item.get("title", "").strip()
+            if t and ":" not in t and t not in SEEN_DAILY_TITLES and t not in candidate_titles:
+                candidate_titles.append(t)
+    except Exception:
+        pass
 
     random.shuffle(candidate_titles)
     added = len(DAILY_FRESH_ARTICLES)
@@ -170,22 +168,22 @@ def fetch_daily_articles(force: bool = False):
         try:
             batch = "|".join(candidate_titles[:12])
             eu = f"https://wikipedia.org{urllib.parse.quote(batch)}&uselang=zh-tw&format=json"
-            pages = requests.get(eu, headers=headers, timeout=7).json().get("query", {}).get("pages", {})
+            pages = requests.get(eu, headers=WIKI_HEADERS, timeout=8).json().get("query", {}).get("pages", {})
             for pid, pinfo in pages.items():
                 if added >= 10:
                     break
                 raw_title = pinfo.get("title", "").strip()
                 full_txt = pinfo.get("extract", "").strip()
-                if raw_title and len(full_txt) >= 350 and raw_title not in SEEN_DAILY_TITLES:
+                if raw_title and len(full_txt) >= 320 and raw_title not in SEEN_DAILY_TITLES:
                     added += 1
                     SEEN_DAILY_TITLES.add(raw_title)
                     clean_full = full_txt[:3800] + ("\n\n（……以上為完整深度知識長文精編）" if len(full_txt) > 3800 else "")
                     first_sent = next(iter([s.strip() for s in clean_full.split("。") if len(s.strip()) > 12]), clean_full[:55])
                     DAILY_FRESH_ARTICLES.append({
                         "id": f"DY{random.randint(1000,9999)}_{added}", "raw_key": raw_title,
-                        "date_tag": today_tag, "track": "每日文章", "cat": "深度知識百科",
-                        "title": f"【新知識 #{added}】{raw_title}",
-                        "author": f"{today_tag} 知識百科精選長文",
+                        "date_tag": today_tag, "track": "每日文章", "cat": f"{topic}精選",
+                        "title": f"【{topic}新知 #{added}】{raw_title}",
+                        "author": f"{today_tag} 深度知識百科長文",
                         "quote": f"「{first_sent}。」", "content": clean_full,
                         "url": f"https://wikipedia.org{urllib.parse.quote(raw_title)}"
                     })
@@ -211,13 +209,11 @@ def fetch_new_classics():
         if not any(ex["id"] == x.get("id") for x in CLASSIC_LONG_ARTICLES):
             CLASSIC_LONG_ARTICLES.insert(0, ex)
             added_c += 1
-            if added_c >= 1:
-                break
+            break
 
     try:
         u = "https://wikisource.org"
-        headers = {"User-Agent": f"ClassicReadingSalonBot/{random.randint(1000,9999)}"}
-        pages = requests.get(u, headers=headers, timeout=6).json().get("query", {}).get("pages", {})
+        pages = requests.get(u, headers=WIKI_HEADERS, timeout=7).json().get("query", {}).get("pages", {})
         for pid, pinfo in pages.items():
             if added_c >= 2:
                 break
@@ -237,6 +233,12 @@ def fetch_new_classics():
     except Exception:
         pass
 
+@app.get("/api/refresh_articles")
+def api_refresh_articles():
+    fetch_daily_articles(force=True)
+    fetch_new_classics()
+    return {"daily": DAILY_FRESH_ARTICLES, "classic": CLASSIC_LONG_ARTICLES}
+
 fetch_daily_articles(force=False)
 
 def call_sheet(payload: dict):
@@ -254,7 +256,7 @@ def get_user_name(uid: str):
 
 @app.api_route("/", methods=["GET", "HEAD"])
 def root():
-    return {"status": "Online", "service": "Taiwan Classic & Daily Full-Text Audio Reader Pro 7.0"}
+    return {"status": "Online", "service": "Taiwan Classic & Daily Full-Text Audio Reader Pro 8.0"}
 
 @app.post("/api/article_add")
 async def web_article_add(
@@ -291,7 +293,7 @@ def classic_reading_salon_app(msg: str = "", refresh: str = ""):
     daily_cnt = len(DAILY_FRESH_ARTICLES)
     classic_cnt = len(CLASSIC_LONG_ARTICLES)
     toast_html = (
-        '<div class="toast">✨ 已為您一鍵換上全新 10 篇今日長文與新收錄經典原典！</div>' if refresh == "1"
+        '<div class="toast">✨ 已為您換上全新 10 篇今日長文與新收錄經典原典！</div>' if refresh == "1"
         else ('<div class="toast">📚 您的完整長文已成功收錄進對應館藏軌道囉！</div>' if msg == "added" else "")
     )
 
@@ -358,7 +360,7 @@ def classic_reading_salon_app(msg: str = "", refresh: str = ""):
         <div id="track-desc" style="font-size:14px;font-weight:900;margin-top:8px;line-height:1.5;">📅【今日每日長文軌道】每日自動蒐集 10 篇最新完整知識長文（與經典原典完全不同），支援拖曳快轉與語速調節！</div>
         <div class="btn-row" style="margin-top:10px;">
           <button type="button" class="btn btn-gold" id="radio-btn" onclick="toggleRadio()">📻 連續聽書</button>
-          <a href="{S}reader_app?refresh=1" onclick="this.href='{S}reader_app?refresh=1&t='+Date.now()" class="btn btn-emerald" style="border:1px solid #D4AF37;">🔄 一鍵更新文章</a>
+          <button type="button" id="refresh-btn" onclick="refreshArticlesAjax()" class="btn btn-emerald" style="border:1px solid #D4AF37;">🔄 一鍵更新文章</button>
           <button type="button" class="btn btn-paper" style="max-width:95px;" id="rate-btn" onclick="cycleRate()">🎚️ 1.0x</button>
         </div>
       </div>
@@ -536,6 +538,34 @@ def classic_reading_salon_app(msg: str = "", refresh: str = ""):
         const startPos = parseInt(document.getElementById('seek-' + idx).value, 10) || 0;
         speakChunk(idx, startPos, false);
       }}
+      async function refreshArticlesAjax() {{
+        stopAllSpeech();
+        const btn = document.getElementById('refresh-btn');
+        btn.innerText = '⏳ 抓取新文中...';
+        btn.disabled = true;
+        try {{
+          const res = await fetch('{S}api{S}refresh_articles?t=' + Date.now());
+          const data = await res.json();
+          if (data.daily && data.daily.length > 0) {{
+            DAILY_LIST.length = 0;
+            DAILY_LIST.push(...data.daily);
+          }}
+          if (data.classic && data.classic.length > 0) {{
+            CLASSIC_LIST.length = 0;
+            CLASSIC_LIST.push(...data.classic);
+          }}
+          document.getElementById('btn-track-daily').innerText = '📅 今日每日長文（' + DAILY_LIST.length + ' 篇完整）';
+          document.getElementById('btn-track-classic').innerText = '🏛️ 傳世經典原典（' + CLASSIC_LIST.length + ' 篇完整）';
+          renderToc();
+          renderBooks();
+          btn.innerText = '✅ 已換上新文章！';
+          setTimeout(() => {{ btn.innerText = '🔄 一鍵更新文章'; }}, 2000);
+        }} catch (e) {{
+          btn.innerText = '🔄 一鍵更新文章';
+        }}
+        btn.disabled = false;
+      }}
+
       function switchTrack(t) {{
         stopAllSpeech();
         curTrack = t;
@@ -655,7 +685,7 @@ def classic_reading_salon_app(msg: str = "", refresh: str = ""):
 def make_reading_salon_card():
     S = chr(47)
     ts = int(datetime.datetime.utcnow().timestamp())
-    app_uri = f"{RENDER_BASE_URL}/reader_app?openExternalBrowser=1"
+    app_uri = f"{RENDER_BASE_URL}/reader_app?t={ts}&openExternalBrowser=1"
     refresh_uri = f"{RENDER_BASE_URL}/reader_app?refresh=1&t={ts}&openExternalBrowser=1"
     daily_top = next(iter(DAILY_FRESH_ARTICLES), {})
     classic_top = next(iter(CLASSIC_LONG_ARTICLES), {})
