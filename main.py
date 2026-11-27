@@ -18,7 +18,7 @@ GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycbxoe98yMHG5yioZyXV-8
 # ⚠️ 2. 請填入這個閱讀機器人的 LINE 官方帳號 ID（包含 @ 符號，例如 @123abcde）
 LINE_BOT_BASIC_ID = "@849zyixj"
 # ⚠️ 3. 請填入這個閱讀機器人的 Render 公開網址（結尾不要加斜線）
-RENDER_BASE_URL = "https://onrender.com"
+RENDER_BASE_URL = "https://taiwan-classic-reading-salon-bot.onrender.com"
 # ⚠️ 4. 可填入您的博客來／Readmoo讀墨／金石堂聯盟分潤購書網址（未填預設導向博客來）
 BOOK_AFFILIATE_URL = "https://books.com.tw"
 
