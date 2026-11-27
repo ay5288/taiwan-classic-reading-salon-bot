@@ -655,9 +655,10 @@ def classic_reading_salon_app(msg: str = "", refresh: str = ""):
       renderBooks();
       renderNotes();
     </script></body></html>"""
-        return HTMLResponse(content=html, headers={"Cache-Control": "no-store, no-cache, must-revalidate, max-age=0"})
+    return HTMLResponse(content=html, headers={"Cache-Control": "no-store, no-cache, must-revalidate, max-age=0"})
 
 def make_reading_salon_card():
+
 
     S = chr(47)
     ts = int(datetime.datetime.utcnow().timestamp())
