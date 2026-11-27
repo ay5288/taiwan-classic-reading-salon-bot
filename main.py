@@ -25,10 +25,10 @@ BOOK_AFFILIATE_URL = "https://books.com.tw"
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
-# 軌道 A：每日自動蒐集的新文章（由 API 動態抓取 ＋ 保底補滿 10 篇，永遠滿載）
+# 軌道 A：每日自動蒐集的新文章（支援一鍵換新 10 篇完整長文）
 DAILY_FRESH_ARTICLES = []
 
-# 軌道 B：傳世經典長文原典館（10 篇千古名篇完整原文 ＋ 深度白話解析）
+# 軌道 B：傳世經典長文原典館（10 篇千古名篇完整原文 ＋ 支援一鍵新增經典原典）
 CLASSIC_LONG_ARTICLES = [
     {
         "id": "CL01", "track": "經典長文", "cat": "兵法謀略", "title": "1. 《孫子兵法・謀攻篇》完整原典與現代戰略深解",
@@ -101,6 +101,30 @@ CLASSIC_LONG_ARTICLES = [
         "url": BOOK_AFFILIATE_URL
     }
 ]
+EXTRA_CLASSICS_POOL = [
+    {
+        "id": "CL11", "track": "經典長文", "cat": "駢文絕唱", "title": "王勃《滕王閣序》完整原典與千古名句賞析",
+        "author": "王勃（初唐四傑）",
+        "quote": "「落霞與孤鶩齊飛，秋水共長天一色。老當益壯，寧移白首之心；窮且益堅，不墜青雲之志。」",
+        "content": "【完整原典精編】\n豫章故郡，洪都新府。星分翼軫，地接衡廬。襟三江而帶五湖，控蠻荊而引甌越。物華天寶，龍光射牛鬥之墟；人傑地靈，徐孺下陳蕃之榻。雄州霧列，俊采星馳。台隍枕夷夏之交，賓主盡東南之美。\n\n時維九月，序屬三秋。潦水盡而寒潭清，煙光凝而暮山紫。儼驂騑於上路，訪風景於崇阿。臨帝子之長洲，得天人之舊館。層巒聳翠，上出重霄；飛閣流丹，下臨無地。鶴汀鳧渚，窮島嶼之縈迴；桂殿蘭宮，即岡巒之體勢。\n\n披繡闥，俯雕甍，山原曠其盈視，川澤紆其駭矚。閭閻撲地，鐘鳴鼎食之家；舸艦彌津，青雀黃龍之舳。雲銷雨霽，彩徹區明。落霞與孤鶩齊飛，秋水共長天一色。漁舟唱晚，響窮彭蠡之濱；雁陣驚寒，聲斷衡陽之浦。\n\n嗟乎！時運不齊，命途多舛。馮唐易老，李廣難封。屈賈誼於長沙，非無聖主；竄梁鴻於海曲，豈乏明時？所賴君子見機，達人知命。老當益壯，寧移白首之心；窮且益堅，不墜青雲之志。酌貪泉而覺爽，處涸轍以猶歡。北海雖賒，扶搖可接；東隅已逝，桑榆非晚。\n\n【現代人生啟示】\n王勃在人生遭受重挫、遠赴交趾探父途中寫下此篇。面對懷才不遇，他給出了最強大的生命宣言：「窮且益堅，不墜青雲之志；東隅已逝，桑榆非晚。」只要不放棄，任何時候重新出發都不嫌晚。",
+        "url": BOOK_AFFILIATE_URL
+    },
+    {
+        "id": "CL12", "track": "經典長文", "cat": "治國諫言", "title": "魏徵《諫太宗十思疏》完整原典與居安思危智慧",
+        "author": "魏徵（唐代）",
+        "quote": "「求木之長者，必固其根本；欲流之遠者，必浚其泉源；思國之安者，必積其德義。」",
+        "content": "【完整原典】\n臣聞求木之長者，必固其根本；欲流之遠者，必浚其泉源；思國之安者，必積其德義。源不深而望流之遠，根不固而求木之長，德不厚而思國之理，臣雖下愚，知其不可，而況於明哲乎！人君當神器之重，居域中之大，將崇極天之峻，永保無疆之休。不念居安思危，戒奢以儉，德不處其厚，情不勝其欲，斯亦伐根以求木茂，塞源而欲流長者也。\n\n凡百元首，承天景命，莫不殷憂而道著，功成而德衰。有善始者實繁，能克終者蓋寡。豈取之易而守之難乎？昔取之而有餘，今守之而不足，何也？夫在殷憂，必竭誠以待下；既得志，則縱情以傲物。竭誠則胡越為一體，傲物則骨肉為行路。怨不在大，可畏惟人；載舟覆舟，所宜深慎。\n\n誠能見可欲則思知足以自戒，將有作則思知止以安人，念高危則思謙沖而自牧，懼滿溢則思江海下百川，樂盤遊則思三驅以為度，憂懈怠則思慎始而敬終，慮壅蔽則思虛心以納下，想讒邪則思正身以黜惡，恩所加則思無因喜以謬賞，罰所及則思無因怒而濫刑。總此十思，弘茲九德，簡能而任之，擇善而從之，則智者盡其謀，勇者竭其力，仁者播其惠，信者效其忠。\n\n【現代領導與自我修煉深解】\n魏徵精準點出人性通病：「有善始者實繁，能克終者蓋寡」——人在逆境創業時往往謙虛勤奮，一旦成功就容易鬆懈傲慢。「十思」正是給每一位創業者與領導者的每日自我檢核清單。",
+        "url": BOOK_AFFILIATE_URL
+    },
+    {
+        "id": "CL13", "track": "經典長文", "cat": "至情名篇", "title": "李密《陳情表》完整原典與真誠溝通藝術深解",
+        "author": "李密（西晉）",
+        "quote": "「臣無祖母，無以至今日；祖母無臣，無以終餘年。母、孫二人，更相為命，是以區區不能廢遠。」",
+        "content": "【完整原典】\n臣密言：臣以險釁，夙遭閔凶。生孩六月，慈父見背；行年四歲，舅奪母志。祖母劉憫臣孤弱，躬親撫養。臣少多疾病，九歲不行，零丁孤苦，至於成立。既無伯叔，終鮮兄弟，門衰祚薄，晚有兒息。外無期功強近之親，內無應門五尺之僮，煢煢孑立，形影相弔。而劉夙嬰疾病，常在床蓐，臣侍湯藥，未曾廢離。\n\n逮奉聖朝，沐浴清化。前太守臣逵察臣孝廉，後刺史臣榮舉臣秀才。臣以供養無主，辭不赴命。詔書特下，拜臣郎中，尋蒙國恩，除臣洗馬。猥以微賤，當侍東宮，非臣隕首所能上報。臣具以表聞，辭不就職。詔書切峻，責臣逋慢。郡縣逼迫，催臣上道；州司臨門，急於星火。臣欲奉詔奔馳，則劉病日篤；欲苟順私情，則告訴不許：臣之進退，實為狼狽。\n\n伏惟聖朝以孝治天下，凡在故老，猶蒙矜育，況臣孤苦，特為尤甚。但以劉日薄西山，氣息奄奄，人命危淺，朝不慮夕。臣無祖母，無以至今日；祖母無臣，無以終餘年。母、孫二人，更相為命，是以區區不能廢遠。臣密今年四十有四，祖母今年九十有六，是臣盡節於陛下之日長，報養劉之日短也。烏鳥私情，願乞終養。臣生當隕首，死當結草。臣不勝犬馬怖懼之情，謹拜表以聞。\n\n【高情商溝通深解】\n面對新朝皇帝的強硬徵召，李密以「動之以情、曉之以理、明之以利」的絕妙結構，成功說服晉武帝收回成命並賜奴婢供養祖母。",
+        "url": BOOK_AFFILIATE_URL
+    }
+]
+
 FALLBACK_DAILY_ARTICLES = [
     {"title": "【今日深度長文 #1】睡眠科學與大腦膠淋巴排毒機制完整解析", "cat": "健康科學", "author": "今日知識精編", "quote": "「深度睡眠是大腦清除代謝廢物、鞏固長期記憶的黃金修復期。」", "content": "現代神經科學研究發現，人類大腦在進入深層非快速動眼睡眠（NREM）時，腦脊髓液的流動速度會大幅增加，透過「膠淋巴系統（Glymphatic System）」將白天清醒時累積的 β-類澱粉蛋白等神經代謝廢物沖刷排出。\n\n長期睡眠不足不僅會導致專注力下降與情緒波動，更會讓大腦處於慢性發炎狀態。要提升深度睡眠品質，專家建議三個核心習慣：第一，每天早上起床後 30 分鐘內接觸自然陽光 10 分鐘，校準生理時鐘與褪黑激素分泌節律；第二，下午兩點後避免攝取咖啡因；第三，睡前一小時調暗室內燈光並遠離高亮度螢幕，讓體溫自然微降，即可大幅縮短入睡時間並延長深睡比例。"},
     {"title": "【今日深度長文 #2】複利效應在知識、健康與財務中的底層運作", "cat": "思維模型", "author": "今日知識精編", "quote": "「複利是世界第八大奇蹟，了解它的人賺取它，不了解它的人支付它。」", "content": "複利之所以違反人類直覺，是因為它在前期的增長曲線極為平緩，甚至在頭幾年幾乎看不出與線性努力的差別；但一旦跨過臨界點，增長速度就會呈指數級爆發。\n\n在知識領域，每天精讀一篇深度長文並寫下一句心得，一年累積的認知模型將讓你看透多數人看不見的商業與人生規律；在健康領域，每週維持三次 45 分鐘的 Zone 2 有氧單車或快走，五年後的心肺機能與代謝年齡將遠勝同齡人；在財務領域，持續將現金流投入低成本寬基指數資產並讓股息再投入，時間便會成為你最忠實的合夥人。"},
@@ -114,17 +138,19 @@ FALLBACK_DAILY_ARTICLES = [
     {"title": "【今日深度長文 #10】長期主義者的時間視角：用十年維度看眼前的選擇", "cat": "人生戰略", "author": "今日知識精編", "quote": "「大多數人高估了自己一年能做到的事，卻嚴重低估了自己十年能成就的高度。」", "content": "在追求即時滿足的時代，願意以五年、十年為單位佈局的人幾乎沒有競爭對手。無論是深耕一項專業技能、累積健康的身體資本，還是打造一套持續服務用戶的知識與工具生態，前期都需要耐得住寂寞的耕耘。\n\n每當面臨選擇時，問自己一個問題：「十年後的我，會感謝今天的我做出哪一個決定？」答案往往清晰無比。"}
 ]
 
-def fetch_daily_articles():
+def fetch_daily_articles(force: bool = False):
     today = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
     today_tag = today.strftime("%Y-%m-%d")
-    if len([x for x in DAILY_FRESH_ARTICLES if x.get("date_tag") == today_tag]) >= 10:
+    if force:
+        DAILY_FRESH_ARTICLES.clear()
+    elif len([x for x in DAILY_FRESH_ARTICLES if x.get("date_tag") == today_tag]) >= 10:
         return
 
     try:
         u = "https://wikipedia.org"
-        headers = {"User-Agent": "ClassicReadingSalonBot/5.0"}
+        headers = {"User-Agent": f"ClassicReadingSalonBot/{random.randint(100,999)}"}
         pages = requests.get(u, headers=headers, timeout=6).json().get("query", {}).get("pages", {})
-        added = len([x for x in DAILY_FRESH_ARTICLES if x.get("date_tag") == today_tag])
+        added = len(DAILY_FRESH_ARTICLES)
         for pid, pinfo in pages.items():
             if added >= 10:
                 break
@@ -135,35 +161,59 @@ def fetch_daily_articles():
                 clean_full = full_txt[:3600] + ("\n\n（……以上為完整深度知識長文精編）" if len(full_txt) > 3600 else "")
                 first_sent = next(iter([s.strip() for s in clean_full.split("。") if len(s.strip()) > 12]), clean_full[:55])
                 DAILY_FRESH_ARTICLES.append({
-                    "id": f"DY{today.strftime('%m%d')}_{added}",
-                    "date_tag": today_tag,
-                    "track": "每日文章",
-                    "cat": "今日深度百科",
-                    "title": f"【今日長文 #{added}】{raw_title}",
-                    "author": f"{today_tag} 每日自動蒐集完整知識長文",
-                    "quote": f"「{first_sent}。」",
-                    "content": clean_full,
+                    "id": f"DY{today.strftime('%m%d')}_{random.randint(10,99)}_{added}",
+                    "date_tag": today_tag, "track": "每日文章", "cat": "今日深度百科",
+                    "title": f"【最新長文 #{added}】{raw_title}",
+                    "author": f"{today_tag} 即時蒐集完整知識長文",
+                    "quote": f"「{first_sent}。」", "content": clean_full,
                     "url": f"https://wikipedia.org{urllib.parse.quote(raw_title)}"
                 })
     except Exception:
         pass
 
-    # 移出 try...except 之外，確保無論維基 API 是否連線成功，永遠補滿足足 10 篇今日每日長文！
-    for fb in FALLBACK_DAILY_ARTICLES:
-        if len([x for x in DAILY_FRESH_ARTICLES if x.get("date_tag") == today_tag]) >= 10:
+    pool = list(FALLBACK_DAILY_ARTICLES)
+    if force:
+        random.shuffle(pool)
+    for fb in pool:
+        if len(DAILY_FRESH_ARTICLES) >= 10:
             break
         if not any(fb["title"] in x.get("title", "") for x in DAILY_FRESH_ARTICLES):
             DAILY_FRESH_ARTICLES.append({
-                "id": f"FB_{today.strftime('%m%d')}_{len(DAILY_FRESH_ARTICLES)+1}",
-                "date_tag": today_tag,
-                "track": "每日文章",
-                "cat": fb["cat"],
-                "title": fb["title"],
-                "author": f"{today_tag} {fb['author']}",
-                "quote": fb["quote"],
-                "content": fb["content"],
-                "url": BOOK_AFFILIATE_URL
+                "id": f"FB_{random.randint(100,999)}_{len(DAILY_FRESH_ARTICLES)+1}",
+                "date_tag": today_tag, "track": "每日文章", "cat": fb["cat"],
+                "title": fb["title"], "author": f"{today_tag} {fb['author']}",
+                "quote": fb["quote"], "content": fb["content"], "url": BOOK_AFFILIATE_URL
             })
+
+def fetch_new_classics():
+    try:
+        u = "https://wikisource.org"
+        headers = {"User-Agent": f"ClassicReadingSalonBot/{random.randint(100,999)}"}
+        pages = requests.get(u, headers=headers, timeout=6).json().get("query", {}).get("pages", {})
+        added = 0
+        for pid, pinfo in pages.items():
+            if added >= 2:
+                break
+            raw_title = pinfo.get("title", "").strip()
+            full_txt = pinfo.get("extract", "").strip()
+            if raw_title and len(full_txt) >= 350 and "/" not in raw_title and ":" not in raw_title and not any(raw_title in x.get("title", "") for x in CLASSIC_LONG_ARTICLES):
+                added += 1
+                clean_full = full_txt[:3600] + ("\n\n（……以上為中文維基文庫典藏原典全文）" if len(full_txt) > 3600 else "")
+                first_sent = next(iter([s.strip() for s in clean_full.split("。") if len(s.strip()) > 10]), clean_full[:50])
+                CLASSIC_LONG_ARTICLES.insert(0, {
+                    "id": f"WS_{random.randint(100,999)}", "track": "經典長文", "cat": "典藏古籍原典",
+                    "title": f"【新收錄原典】《{raw_title}》完整原典全文",
+                    "author": "中文維基文庫・傳世古籍館藏",
+                    "quote": f"「{first_sent}。」", "content": clean_full,
+                    "url": f"https://wikisource.org{urllib.parse.quote(raw_title)}"
+                })
+    except Exception:
+        pass
+
+    for ex in EXTRA_CLASSICS_POOL:
+        if not any(ex["id"] == x.get("id") for x in CLASSIC_LONG_ARTICLES):
+            CLASSIC_LONG_ARTICLES.insert(0, ex)
+            break
 
 fetch_daily_articles()
 
@@ -182,7 +232,7 @@ def get_user_name(uid: str):
 
 @app.api_route("/", methods=["GET", "HEAD"])
 def root():
-    return {"status": "Online", "service": "Taiwan Classic & Daily Full-Text Audio Reader Pro 5.0"}
+    return {"status": "Online", "service": "Taiwan Classic & Daily Full-Text Audio Reader Pro 6.0"}
 
 @app.post("/api/article_add")
 async def web_article_add(
@@ -211,14 +261,21 @@ async def web_note_add(title: str = Form(...), quote: str = Form(...)):
     call_sheet({"action": "add_note", "rec_id": rid, "user_id": "web_reader", "user_name": "書房讀者", "cat": "心動金句", "title": title, "author": "個人筆記", "quote": quote})
     return {"status": "ok"}
 @app.get("/reader_app", response_class=HTMLResponse)
-def classic_reading_salon_app(msg: str = ""):
-    fetch_daily_articles()
+def classic_reading_salon_app(msg: str = "", refresh: str = ""):
+    if refresh == "1":
+        fetch_daily_articles(force=True)
+        fetch_new_classics()
+    else:
+        fetch_daily_articles(force=False)
     S = chr(47)
     daily_json = json.dumps(DAILY_FRESH_ARTICLES, ensure_ascii=False)
     classic_json = json.dumps(CLASSIC_LONG_ARTICLES, ensure_ascii=False)
     daily_cnt = len(DAILY_FRESH_ARTICLES)
     classic_cnt = len(CLASSIC_LONG_ARTICLES)
-    toast_html = '<div class="toast">📚 您的完整長文已成功收錄進對應館藏軌道囉！</div>' if msg == "added" else ""
+    toast_html = (
+        '<div class="toast">✨ 已為您一鍵更新全新 10 篇今日長文與新收錄經典原典！</div>' if refresh == "1"
+        else ('<div class="toast">📚 您的完整長文已成功收錄進對應館藏軌道囉！</div>' if msg == "added" else "")
+    )
 
     html = f"""<!DOCTYPE html><html><head><meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
@@ -280,10 +337,11 @@ def classic_reading_salon_app(msg: str = ""):
           <span style="font-size:12px;color:#E5C158;font-weight:800;">🕯️ 雙軌獨立長文館 · 完整全文直讀</span>
           <span id="read-stat" style="font-size:11px;background:rgba(212,175,55,0.2);color:#F7F3EA;padding:3px 10px;border-radius:12px;font-weight:700;">已聽讀 0 篇</span>
         </div>
-        <div id="track-desc" style="font-size:14px;font-weight:900;margin-top:8px;line-height:1.5;">📅【今日每日長文軌道】每日自動蒐集 10 篇最新完整知識長文（與經典原典完全不同），支援台灣中文語音連播！</div>
+        <div id="track-desc" style="font-size:14px;font-weight:900;margin-top:8px;line-height:1.5;">📅【今日每日長文軌道】每日自動蒐集 10 篇最新完整知識長文（與經典原典完全不同），支援拖曳快轉與語速調節！</div>
         <div class="btn-row" style="margin-top:10px;">
-          <button type="button" class="btn btn-gold" id="radio-btn" onclick="toggleRadio()">📻 本館有聲書連續朗讀</button>
-          <button type="button" class="btn btn-paper" style="max-width:110px;" id="rate-btn" onclick="cycleRate()">🎚️ 1.0x 語速</button>
+          <button type="button" class="btn btn-gold" id="radio-btn" onclick="toggleRadio()">📻 連續聽書</button>
+          <a href="{S}reader_app?refresh=1" class="btn btn-emerald" style="border:1px solid #D4AF37;">🔄 一鍵更新文章</a>
+          <button type="button" class="btn btn-paper" style="max-width:95px;" id="rate-btn" onclick="cycleRate()">🎚️ 1.0x</button>
         </div>
       </div>
 
@@ -339,8 +397,15 @@ def classic_reading_salon_app(msg: str = ""):
       const DAILY_LIST = {daily_json};
       const CLASSIC_LIST = {classic_json};
       let curTrack = 'daily', fontSize = 16, speakingIdx = -1, radioMode = false, speechRate = 1.0;
+      let curChunks = [], curChunkPos = 0, playToken = 0;
 
       function getActiveList() {{ return curTrack === 'daily' ? DAILY_LIST : CLASSIC_LIST; }}
+
+      function splitToChunks(b) {{
+        const raw = (b.title + '。' + b.quote + '。' + b.content).replace(/\\n+/g, '。');
+        const arr = raw.split(/(?<=[。！？；])/).map(s => s.trim()).filter(s => s.length > 0);
+        return arr.length > 0 ? arr : [b.title];
+      }}
 
       function updateReadStat() {{
         const doneList = JSON.parse(localStorage.getItem('read_done_ids') || '[]');
@@ -362,69 +427,110 @@ def classic_reading_salon_app(msg: str = ""):
       }}
 
       function cycleRate() {{
-        speechRate = speechRate === 1.0 ? 1.25 : (speechRate === 1.25 ? 0.85 : 1.0);
-        document.getElementById('rate-btn').innerText = '🎚️ ' + speechRate.toFixed(2).replace('.00','.0') + 'x 語速';
+        speechRate = speechRate === 1.0 ? 1.25 : (speechRate === 1.25 ? 1.5 : (speechRate === 1.5 ? 0.85 : 1.0));
+        document.getElementById('rate-btn').innerText = '🎚️ ' + speechRate + 'x';
+        document.querySelectorAll('.card-rate-sel').forEach(sel => sel.value = String(speechRate));
+        if (speakingIdx !== -1) speakChunk(speakingIdx, curChunkPos, radioMode);
+      }}
+
+      function setCardRate(idx, val) {{
+        speechRate = parseFloat(val) || 1.0;
+        document.getElementById('rate-btn').innerText = '🎚️ ' + speechRate + 'x';
+        document.querySelectorAll('.card-rate-sel').forEach(sel => sel.value = String(speechRate));
+        if (speakingIdx === idx) speakChunk(idx, curChunkPos, radioMode);
       }}
 
       function stopAllSpeech() {{
+        playToken++;
         if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         speakingIdx = -1;
         radioMode = false;
         const rbtn = document.getElementById('radio-btn');
-        if (rbtn) rbtn.innerText = '📻 本館有聲書連續朗讀';
+        if (rbtn) rbtn.innerText = '📻 連續聽書';
         document.querySelectorAll('.tts-single-btn').forEach(b => b.innerText = '🎧 語音聽書');
       }}
 
+      function speakChunk(idx, chunkPos, autoNext) {{
+        if (!('speechSynthesis' in window)) {{ alert('此瀏覽器不支援中文語音朗讀'); return; }}
+        playToken++;
+        const myToken = playToken;
+        window.speechSynthesis.cancel();
+        const list = getActiveList();
+        if (idx >= list.length) {{ stopAllSpeech(); return; }}
+        const b = list[idx];
+        curChunks = splitToChunks(b);
+        curChunkPos = Math.max(0, Math.min(chunkPos, curChunks.length - 1));
+        speakingIdx = idx;
+        radioMode = autoNext;
+
+        document.querySelectorAll('.tts-single-btn').forEach(btn => btn.innerText = '🎧 語音聽書');
+        const curBtn = document.getElementById('tts-btn-' + idx);
+        if (curBtn) curBtn.innerText = '⏹️ 停止';
+        const rbtn = document.getElementById('radio-btn');
+        if (rbtn) rbtn.innerText = autoNext ? `⏹️ 連播中 (${{idx+1}}/${{list.length}})` : '📻 連續聽書';
+
+        const slider = document.getElementById('seek-' + idx);
+        const lbl = document.getElementById('prog-lbl-' + idx);
+        if (slider) {{ slider.max = curChunks.length - 1; slider.value = curChunkPos; }}
+        if (lbl) lbl.innerText = `第 ${{curChunkPos + 1}} / ${{curChunks.length}} 段`;
+
+        const utter = new SpeechSynthesisUtterance(curChunks[curChunkPos]);
+        utter.lang = 'zh-TW';
+        utter.rate = speechRate;
+        utter.onend = () => {{
+          if (myToken !== playToken) return;
+          if (curChunkPos + 1 < curChunks.length) {{
+            speakChunk(idx, curChunkPos + 1, autoNext);
+          }} else {{
+            markDoneById(b.id);
+            if (autoNext && idx + 1 < list.length) {{
+              speakChunk(idx + 1, 0, true);
+            }} else {{
+              stopAllSpeech();
+            }}
+          }}
+        }};
+        window.speechSynthesis.speak(utter);
+      }}
+
+      function seekBook(idx, val) {{
+        const pos = parseInt(val, 10) || 0;
+        const keepAuto = (speakingIdx === idx) ? radioMode : false;
+        speakChunk(idx, pos, keepAuto);
+      }}
+
+      function stepBook(idx, delta) {{
+        const list = getActiveList();
+        const chunks = splitToChunks(list[idx]);
+        const basePos = (speakingIdx === idx) ? curChunkPos : (parseInt(document.getElementById('seek-' + idx).value, 10) || 0);
+        const nextPos = Math.max(0, Math.min(chunks.length - 1, basePos + delta));
+        const keepAuto = (speakingIdx === idx) ? radioMode : false;
+        speakChunk(idx, nextPos, keepAuto);
+      }}
+
+      function toggleRadio() {{
+        if (radioMode) {{ stopAllSpeech(); return; }}
+        speakChunk(0, 0, true);
+      }}
+
+      function speakBook(idx) {{
+        if (speakingIdx === idx && !radioMode) {{ stopAllSpeech(); return; }}
+        const startPos = parseInt(document.getElementById('seek-' + idx).value, 10) || 0;
+        speakChunk(idx, startPos, false);
+      }}
       function switchTrack(t) {{
         stopAllSpeech();
         curTrack = t;
         document.getElementById('btn-track-daily').classList.toggle('active', t === 'daily');
         document.getElementById('btn-track-classic').classList.toggle('active', t === 'classic');
         document.getElementById('track-desc').innerText = t === 'daily'
-          ? '📅【今日每日長文軌道】每日自動蒐集 10 篇最新完整知識長文（與經典原典完全不同），支援台灣中文語音連播！'
-          : '🏛️【傳世經典原典軌道】精選 10 篇千古名篇完整原文與深度賞析，支援台灣中文語音連播！';
+          ? '📅【今日每日長文軌道】每日自動蒐集 10 篇最新完整知識長文（與經典原典完全不同），支援拖曳快轉與語速調節！'
+          : '🏛️【傳世經典原典軌道】精選千古名篇完整原文與深度賞析，支援拖曳快轉與語速調節！';
         document.getElementById('toc-title').innerText = t === 'daily'
           ? '📑 今日每日長文・全文快速跳轉目錄：'
           : '📑 傳世經典原典・全文快速跳轉目錄：';
         renderToc();
         renderBooks();
-      }}
-
-      function playBookAt(idx, autoNext) {{
-        if (!('speechSynthesis' in window)) {{ alert('此瀏覽器不支援中文語音朗讀'); return; }}
-        window.speechSynthesis.cancel();
-        const list = getActiveList();
-        if (idx >= list.length) {{ stopAllSpeech(); return; }}
-        const b = list[idx];
-        speakingIdx = idx;
-        radioMode = autoNext;
-        document.querySelectorAll('.tts-single-btn').forEach(btn => btn.innerText = '🎧 語音聽書');
-        const curBtn = document.getElementById('tts-btn-' + idx);
-        if (curBtn) curBtn.innerText = '⏹️ 停止朗讀';
-        const rbtn = document.getElementById('radio-btn');
-        if (rbtn) rbtn.innerText = autoNext ? `⏹️ 連播中 (${{idx+1}}/${{list.length}})` : '📻 本館有聲書連續朗讀';
-        const utter = new SpeechSynthesisUtterance(b.title + '。' + b.quote + '。' + b.content);
-        utter.lang = 'zh-TW';
-        utter.rate = speechRate;
-        utter.onend = () => {{
-          markDoneById(b.id);
-          if (radioMode && idx + 1 < list.length) {{
-            playBookAt(idx + 1, true);
-          }} else {{
-            stopAllSpeech();
-          }}
-        }};
-        window.speechSynthesis.speak(utter);
-      }}
-
-      function toggleRadio() {{
-        if (radioMode) {{ stopAllSpeech(); return; }}
-        playBookAt(0, true);
-      }}
-
-      function speakBook(idx) {{
-        if (speakingIdx === idx && !radioMode) {{ stopAllSpeech(); return; }}
-        playBookAt(idx, false);
       }}
 
       function jumpToBook(idx) {{
@@ -445,6 +551,7 @@ def classic_reading_salon_app(msg: str = ""):
         document.getElementById('book-box').innerHTML = list.map((b, idx) => {{
           if (kw && !(b.title + b.author + b.quote + b.content).toLowerCase().includes(kw)) return '';
           const wordCnt = (b.content || '').length;
+          const totalSegs = splitToChunks(b).length;
           return `<div id="book-card-${{idx}}" class="book-card">
             <div style="display:flex;justify-content:space-between;align-items:center;font-family:-apple-system,sans-serif;">
               <span style="font-size:11px;font-weight:800;background:#EFE9DC;color:#1E3A2F;padding:3px 10px;border-radius:10px;">${{b.track}} · ${{b.cat}}</span>
@@ -454,8 +561,27 @@ def classic_reading_salon_app(msg: str = ""):
             <div style="font-size:12px;color:#6B5846;margin-top:4px;">✍️ ${{b.author}}</div>
             <div class="quote-box">${{b.quote}}</div>
             <div class="full-article" style="font-size:${{fontSize}}px;">${{b.content}}</div>
-            <div class="btn-row">
-              <button type="button" id="tts-btn-${{idx}}" class="btn btn-gold tts-single-btn" onclick="speakBook(${{idx}})">🎧 語音聽書</button>
+
+            <div style="background:#F4EFE4;border:1px solid rgba(139,108,66,0.25);border-radius:14px;padding:10px 12px;margin-top:14px;font-family:-apple-system,sans-serif;">
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#4A3B2C;font-weight:800;">
+                <span>🎚️ 拖曳進度條快轉到想聽的段落</span>
+                <span id="prog-lbl-${{idx}}">第 1 / ${{totalSegs}} 段</span>
+              </div>
+              <input id="seek-${{idx}}" type="range" min="0" max="${{Math.max(0, totalSegs - 1)}}" value="0" oninput="seekBook(${{idx}}, this.value)" style="width:100%;margin:8px 0;accent-color:#1E3A2F;cursor:pointer;"/>
+              <div style="display:flex;gap:6px;align-items:center;">
+                <button type="button" class="btn btn-paper" style="padding:7px 4px;" onclick="stepBook(${{idx}}, -1)">⏪ 上一段</button>
+                <button type="button" id="tts-btn-${{idx}}" class="btn btn-gold tts-single-btn" style="padding:7px 4px;" onclick="speakBook(${{idx}})">🎧 語音聽書</button>
+                <button type="button" class="btn btn-paper" style="padding:7px 4px;" onclick="stepBook(${{idx}}, 1)">⏩ 快轉下段</button>
+                <select class="card-rate-sel" onchange="setCardRate(${{idx}}, this.value)" style="background:#FFFDF9;border:1px solid #B8860B;color:#2C241E;padding:6px 4px;border-radius:10px;font-size:11px;font-weight:800;">
+                  <option value="0.85">0.85x 舒緩</option>
+                  <option value="1" selected>1.0x 正常</option>
+                  <option value="1.25">1.25x 通勤</option>
+                  <option value="1.5">1.5x 極速</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="btn-row" style="margin-top:10px;">
               <button type="button" class="btn btn-paper" onclick="quickSaveQuote(${{idx}}, this)">🔖 收藏金句</button>
               <a class="btn btn-emerald" href="${{b.url}}" target="_blank">🔗 延伸與購書</a>
             </div>
@@ -511,19 +637,20 @@ def classic_reading_salon_app(msg: str = ""):
 def make_reading_salon_card():
     S = chr(47)
     app_uri = f"{RENDER_BASE_URL}/reader_app?openExternalBrowser=1"
+    refresh_uri = f"{RENDER_BASE_URL}/reader_app?refresh=1&openExternalBrowser=1"
     daily_top = next(iter(DAILY_FRESH_ARTICLES), {})
     classic_top = next(iter(CLASSIC_LONG_ARTICLES), {})
     d_title = str(daily_top.get("title", "今日全球華語熱讀完整長文")) if isinstance(daily_top, dict) else "今日全球華語熱讀完整長文"
     c_quote = str(classic_top.get("quote", "「不戰而屈人之兵，善之善者也。」")) if isinstance(classic_top, dict) else "「閱讀讓靈魂更自由。」"
 
-    share_msg = urllib.parse.quote(f"📚【雙軌典藏書房 ＆ 完整長文有聲閱讀館】\n📅 今日新文：{d_title}\n🏛️ 經典名句：{c_quote}\n🎧 打開即享 20 篇完整長文全文 ＋ 台灣中文語音連續聽書！\n👉 立即進入書房：\n{app_uri}")
+    share_msg = urllib.parse.quote(f"📚【雙軌典藏書房 ＆ 完整長文有聲閱讀館】\n📅 今日新文：{d_title}\n🏛️ 經典名句：{c_quote}\n🎧 打開即享雙軌完整長文 ＋ 語音快轉進度條 ＆ 語速調節！\n👉 立即進入書房：\n{app_uri}")
     share_uri = f"https:{S}{S}line.me{S}R{S}share?text={share_msg}"
 
     bubble_1 = BubbleContainer(
         size="mega",
         header=BoxComponent(layout="vertical", background_color="#1E3A2F", padding_all="16px", contents=[
             TextComponent(text="📚 雙軌典藏書房 ＆ 長文閱讀館", weight="bold", size="md", color="#F7F3EA", wrap=True),
-            TextComponent(text="今日長文 10 篇 · 經典原典 10 篇 · 中文聽書", size="xs", color="#E5C158", weight="bold", wrap=True, margin="xs")
+            TextComponent(text="今日長文 · 經典原典 · 語音快轉 ＆ 語速調節", size="xs", color="#E5C158", weight="bold", wrap=True, margin="xs")
         ]),
         body=BoxComponent(layout="vertical", spacing="sm", background_color="#FFFDF9", contents=[
             TextComponent(text=f"📅 今日新文：{d_title}", size="xs", color="#1E3A2F", weight="bold", wrap=True),
@@ -532,14 +659,14 @@ def make_reading_salon_card():
             ])
         ]),
         footer=BoxComponent(layout="vertical", spacing="sm", background_color="#FFFDF9", contents=[
-            ButtonComponent(style="primary", color="#1E3A2F", height="sm", action=URIAction(label="📖 開啟雙軌 20 篇全文 ＆ 中文聽書", uri=app_uri)),
+            ButtonComponent(style="primary", color="#1E3A2F", height="sm", action=URIAction(label="📖 開啟雙軌完整長文 ＆ 快轉聽書", uri=app_uri)),
             BoxComponent(layout="horizontal", spacing="sm", contents=[
-                ButtonComponent(style="primary", color="#B8860B", height="sm", action=MessageAction(label="📅 每日長文", text="每日長文")),
-                ButtonComponent(style="secondary", height="sm", action=MessageAction(label="🏛️ 經典原典", text="經典長文"))
+                ButtonComponent(style="primary", color="#B8860B", height="sm", action=URIAction(label="🔄 換新文章", uri=refresh_uri)),
+                ButtonComponent(style="secondary", height="sm", action=MessageAction(label="🎲 抽金句", text="每日金句"))
             ]),
             BoxComponent(layout="horizontal", spacing="sm", contents=[
-                ButtonComponent(style="secondary", height="sm", action=MessageAction(label="🎲 抽金句", text="每日金句")),
-                ButtonComponent(style="secondary", height="sm", action=MessageAction(label="📜 看目錄", text="雙軌目錄"))
+                ButtonComponent(style="secondary", height="sm", action=MessageAction(label="📅 每日長文", text="每日長文")),
+                ButtonComponent(style="secondary", height="sm", action=MessageAction(label="🏛️ 經典原典", text="經典長文"))
             ])
         ])
     )
@@ -551,7 +678,7 @@ def make_reading_salon_card():
             TextComponent(text="一鍵分享好文給好友、收藏實體與電子書", size="xs", color="#E5C158", weight="bold", wrap=True, margin="xs")
         ]),
         body=BoxComponent(layout="vertical", spacing="xs", background_color="#FFFDF9", contents=[
-            TextComponent(text="👈 向左滑動返回「雙軌 20 篇完整長文與中文聽書館」", size="xxs", color="#6B5846", weight="bold")
+            TextComponent(text="👈 向左滑動返回「雙軌完整長文與快轉聽書館」", size="xxs", color="#6B5846", weight="bold")
         ]),
         footer=BoxComponent(layout="vertical", spacing="sm", background_color="#FFFDF9", contents=[
             ButtonComponent(style="primary", color="#B8860B", height="sm", action=URIAction(label="🛒 前往博客來／讀墨收藏好書", uri=BOOK_AFFILIATE_URL)),
@@ -571,42 +698,43 @@ async def callback(request: Request):
 
 @handler.add(FollowEvent)
 def on_follow(event):
-    fetch_daily_articles()
+    fetch_daily_articles(force=False)
     card = make_reading_salon_card()
-    line_bot_api.reply_message(event.reply_token, FlexSendMessage(alt_text="📚 雙軌典藏書房 ＆ 20 篇完整長文有聲閱讀館已啟動", contents=card))
+    line_bot_api.reply_message(event.reply_token, FlexSendMessage(alt_text="📚 雙軌典藏書房 ＆ 完整長文有聲閱讀館已啟動", contents=card))
 
 @handler.add(MessageEvent, message=TextMessage)
 def on_text(event):
     uid = event.source.user_id
     txt = event.message.text.strip()
     app_uri = f"{RENDER_BASE_URL}/reader_app?openExternalBrowser=1"
-    fetch_daily_articles()
+    refresh_uri = f"{RENDER_BASE_URL}/reader_app?refresh=1&openExternalBrowser=1"
+    fetch_daily_articles(force=False)
 
     try:
+        if txt in ["換新文章", "更新文章"]:
+            fetch_daily_articles(force=True)
+            fetch_new_classics()
+            card = make_reading_salon_card()
+            line_bot_api.reply_message(event.reply_token, [
+                TextSendMessage(text=f"✨ 已為您換上全新 10 篇今日長文與新收錄經典原典！\n📖 點擊立即閱讀與語音聽書：\n{app_uri}"),
+                FlexSendMessage(alt_text="📚 雙軌典藏書房 ＆ 長文閱讀館", contents=card)
+            ])
+            return
+
         if txt == "每日長文":
             lines = ["📅【今日自動蒐集・10 篇完整深度長文目錄（與經典原典完全不同）】"]
             for idx, b in enumerate(DAILY_FRESH_ARTICLES[:10], 1):
                 lines.append(f"\n{idx}. {b.get('title','')}（約 {len(b.get('content',''))} 字）")
-            lines.append(f"\n🎧 點擊開啟護眼閱讀器，馬上全文直讀＋台灣中文語音連播：\n{app_uri}")
+            lines.append(f"\n🎧 點擊開啟護眼閱讀器，支援語音進度條快轉與語速調節：\n{app_uri}")
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="\n".join(lines)))
             return
 
         if txt == "經典長文":
-            lines = ["🏛️【傳世經典原典館・10 篇千古名篇完整原文與賞析】"]
-            for idx, b in enumerate(CLASSIC_LONG_ARTICLES[:10], 1):
+            lines = [f"🏛️【傳世經典原典館・共 {len(CLASSIC_LONG_ARTICLES)} 篇千古名篇完整原文】"]
+            for idx, b in enumerate(CLASSIC_LONG_ARTICLES[:12], 1):
                 lines.append(f"\n{idx}. {b.get('title','')}（約 {len(b.get('content',''))} 字）\n   ✍️ {b.get('author','')}")
-            lines.append(f"\n🎧 點擊開啟護眼閱讀器，馬上全文直讀＋台灣中文語音連播：\n{app_uri}")
+            lines.append(f"\n🎧 點擊開啟護眼閱讀器，支援語音進度條快轉與語速調節：\n{app_uri}")
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="\n".join(lines)))
-            return
-
-        if txt == "雙軌目錄":
-            msg = (
-                f"📚【雙軌典藏書房・目前館藏統計】\n"
-                f"• 📅 今日每日長文軌道：共 {len(DAILY_FRESH_ARTICLES)} 篇完整知識長文\n"
-                f"• 🏛️ 傳世經典原典軌道：共 {len(CLASSIC_LONG_ARTICLES)} 篇千古名篇全文\n\n"
-                f"👉 點擊進入雙軌閱讀館自由切換軌道與聽書：\n{app_uri}"
-            )
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=msg))
             return
 
         if txt == "每日金句":
@@ -616,7 +744,7 @@ def on_text(event):
                 f"🎲【今日長文精選靈感】\n\n"
                 f"{b.get('quote','')}\n"
                 f"—— {b.get('author','')}《{b.get('title','')}》\n\n"
-                f"📖 點擊進入閱讀器精讀完整全文與台灣中文語音聽書：\n{app_uri}"
+                f"📖 點擊進入閱讀器精讀完整全文與快轉聽書：\n{app_uri}"
             )
             card = make_reading_salon_card()
             line_bot_api.reply_message(event.reply_token, [
@@ -625,7 +753,7 @@ def on_text(event):
             ])
             return
 
-        matched = [b for b in (DAILY_FRESH_ARTICLES + CLASSIC_LONG_ARTICLES) if any(k in txt for k in ["孫子", "兵法", "赤壁", "蘇軾", "道德經", "老子", "出師表", "諸葛亮", "岳陽樓", "范仲淹", "桃花源", "陶淵明", "蘭亭", "王羲之", "師說", "韓愈", "陋室銘", "愛蓮說", "逍遙遊", "莊子"])]
+        matched = [b for b in (DAILY_FRESH_ARTICLES + CLASSIC_LONG_ARTICLES) if any(k in txt for k in ["孫子", "兵法", "赤壁", "蘇軾", "道德經", "老子", "出師表", "諸葛亮", "岳陽樓", "范仲淹", "桃花源", "陶淵明", "蘭亭", "王羲之", "師說", "韓愈", "陋室銘", "愛蓮說", "逍遙遊", "莊子", "滕王閣", "王勃", "十思疏", "魏徵", "陳情表", "李密"])]
         if matched:
             b = next(iter(matched), {})
             msg = (
@@ -633,7 +761,7 @@ def on_text(event):
                 f"🏛️ {b.get('title','')}\n"
                 f"✍️ {b.get('author','')}（全文約 {len(b.get('content',''))} 字）\n\n"
                 f"{b.get('quote','')}\n\n"
-                f"👉 立即開啟護眼閱讀器精讀完整原文＋台灣中文語音聽書：\n{app_uri}"
+                f"👉 立即開啟護眼閱讀器精讀完整原文＋快轉聽書：\n{app_uri}"
             )
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=msg))
             return
