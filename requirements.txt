@@ -2,4 +2,4 @@ fastapi
 uvicorn
 line-bot-sdk
 requests
-python-multipar
+python-multipart
